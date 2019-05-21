@@ -1,0 +1,64 @@
+
+<app-paginator></app-paginator>
+<div id="main-div">
+	
+	<!-- <link rel="stylesheet" href="static/angular/assets/css/components/meetings.css"> -->
+	<div class=" breadcrumbSection">
+			<a class="btn btn-primary" routerLink="/edit/survey/survey/add">Create</a>
+		<div class="container">
+		  <div class="row">
+			<div class="col-sm-12">
+			  <ol class="breadcrumb">
+				<li class="breadcrumb-item" *ngFor="let item of bread_crumb.items">
+				  <a routerLink="{{item.link}}">
+					{{item.title}}
+				  </a>
+				</li>
+				<li class="breadcrumb-item">{{bread_crumb.title}}</li>
+			  </ol>
+			</div>
+		  </div>
+		</div>
+	</div>
+
+	<div class="container" *ngIf="no_meet" >
+		<div class="row">
+			<div class="col-lg-12 ">
+				<div class="jumbotron text-center">
+					<h1>No {{heading |titlecase}} for you :)</h1>
+					<hr>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="kanban-card" *ngFor="let survey of survey_data">
+				<div class="kanban-meeting-info">
+					<a class="kanban-upcoming-meeting" routerLink="/survey/{{survey.id}}">
+						<div class="CalendarDateWrapper">
+							<!-- <span *ngIf="survey.open_date" class="CalendarDateWrap">
+								<span class="kanban-upcoming-meeting-date">
+									{{voting.open_date.day}}
+								</span>
+								<span>
+									{{voting.open_date.month_year}}
+								</span>
+								<span>
+									{{voting.open_date.time}}
+								</span>
+							</span> -->
+						</div>
+						<div class="Info">
+							<p *ngIf="survey.name">
+								<b>{{survey.name}}</b>
+							</p>
+							<span *ngIf="survey.description"><strong>Survey Description: </strong>{{survey.description}}</span>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

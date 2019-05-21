@@ -61,8 +61,13 @@ export class MessengerComponent implements OnInit {
         this.socketService.make_video_call(uid);
     }
     
-	select_chat_user(target_id) {
-        var obj_this = this;
+	select_chat_user(target_id) {        
+        var obj_this = this;     
+        if(obj_this.active_chat_user &&  target_id == obj_this.active_chat_user.id)
+        {
+            return;
+        }
+        obj_this.attachments = [];
         var ww = $(window).width();
 		if(ww <= 767){
             obj_this.is_mobile_device = true;
@@ -118,7 +123,7 @@ export class MessengerComponent implements OnInit {
     }
 
 	onUserSelected(messages, already_fetched = 0) {
-        var obj_this = this;        
+        var obj_this = this;
 		$( ".msg_card_body").unbind( "scroll" );
 		$(".msg_card_body").scroll(function(){
             let scroll_top = $(".msg_card_body").scrollTop();
@@ -216,12 +221,16 @@ export class MessengerComponent implements OnInit {
         },20)                	
 	}
 
-	send_message(input_data){
+	send_message(input_data, force_post= false){        
 		try{
             let args = {
                 app: 'chat',
                 model: 'message',
                 method: 'send'
+            }
+            if (force_post)
+            {
+                args['post'] = 1;
             }
             input_data = {
                 params: input_data,
@@ -242,76 +251,26 @@ export class MessengerComponent implements OnInit {
 		}
     }
     
-    files_in_message = {};
-
-    file_change(ev)
+    file_change(event)
     {
         let obj_this = this;
-        let files = ev.target.files;
-        if(ev.target.value.length > 0)
-        {
-            let thumb = `
-            <div contenteditable="false" class="doc-thumb" style="display: flex;">
-                <span class="doc-thumb-icon"><i class="fa fa-2x fa-file"></i></span>
-                <span class="file_name">`+files[0].name+`</span>
-                <span class="doc-thumb-close"><i class="del fas fa-times-circle"></i></span>
-            </div>
-            `;
-            var doc_el = $(thumb);
-            let file_id = Date.now();
-            doc_el.attr('id', file_id);
-            doc_el.click(function(e){                
-                e.preventDefault();
-                if($(e.target).hasClass('del'))
-                {                    
-                    delete obj_this.files_in_message[doc_el.attr('id')];
-                    if(doc_el.prev().is('br'))
-                    doc_el.prev().remove();
-                    if(doc_el.prev().is('br'))
-                    doc_el.prev().remove();
-                    if(doc_el.next().is('br'))
-                    doc_el.next().remove();
-                    doc_el.remove();
-                }
-            });
-
-            obj_this.files_in_message[file_id] = files[0];
-            var reader = new FileReader();
-            reader.onload = (function(f) {
-                return function(e) {
-                    let binary = e.target.result;
-                    let index = binary.indexOf(';base64,');
-                    binary = binary.substr(index+8, binary.length);
-                    binary = binary.trim();
-                    obj_this.files_in_message[file_id].binary = binary;                    
-                };
-            })(files[0]);
-            reader.readAsDataURL(files[0]);
-
-            var editor_el =  $('.emoji-wysiwyg-editor');
-            var prev_html = editor_el.html().trim();            
-            editor_el.append(doc_el);
-            if(doc_el.prev().is('br'))
-            {
-                if(doc_el.prev().prev().is('br'))
-                {
-
-                }
-                else
-                {
-                    doc_el.before('<br/>');        
-                }
+        console.log('File Change');
+        function setupReader(file) {
+            var name = file.name;
+            var reader = new FileReader();  
+            reader.onload = function(e) {  
+                let binary = e.target.result;
+                obj_this.attachments.push({
+                    name: name,
+                    binary : binary
+                });
             }
-            else if(prev_html.length != 0)
-                doc_el.before('<br/><br/>');
-            doc_el.after('<br/><br/>');
-            $('#msg_file').closest('form')[0].reset();
-            // setTimeout(function(){
-            //     editor_el.scrollTop(editor_el[0].scrollHeight);
-            //     editor_el.click();
-            // }, 10);
-            
-        }
+            reader.readAsText(file);
+        }    
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            setupReader(files[i]);
+        }    
     }
     
     attach_btn_click(ev)
@@ -333,23 +292,6 @@ export class MessengerComponent implements OnInit {
             console.log('Chat user must already have messages');
             obj_this.active_chat_user.messages = [];
         }
-
-        let file_ids = Object.keys(obj_this.files_in_message);        
-        let attachments = [];
-        if(file_ids.length > 0)
-        {            
-            $('.emoji-wysiwyg-editor .doc-thumb').each(function(i, el){                
-                let file_id = el.id;
-                let file_name = $(el).find('.file_name').html();
-                let file_link = `<a data_id="`+file_id+`">`+file_name+`</a>`;
-                $(el).html(file_link);
-                attachments.push({
-                    name:file_name,
-                    file_id: file_id,
-                    attachment: obj_this.files_in_message[file_id].binary
-                })
-            });
-        }
         
         var message_content = $('.emoji-wysiwyg-editor').html();
 		if(message_content.endsWith('<div><br></div>'))
@@ -368,29 +310,28 @@ export class MessengerComponent implements OnInit {
 		var input_data = {
 			body: message_content,
             sender: obj_this.user_data.id,
-            attachments: attachments,
+            attachments: obj_this.attachments,
 			to: obj_this.active_chat_user["id"],
             create_date: new Date(),
-            no_loader: 1,            
+            no_loader: 1,
         }
-        if(attachments.length > 0)
+        var force_post = false;
+        if(obj_this.attachments.length > 0)
         {
+            force_post = true;
             input_data['on_success'] = function(data){                
-                this.attachments.forEach(element => {                    
-                    let link = $('.meetVue-chat-body .doc-thumb a[data_id="'+element.file_id+'"]');
-                    if(link.length > 0)
-                    {
-                        link.attr('href', '/#/chat/doc/'+data.id);
-                    }
+                let that_message = obj_this.active_chat_user.messages.filter(function(obj){
+                    obj.id == data.id;
                 });
+                that_message.attachments = data.attachments;
             }
         }
 
-		obj_this.send_message(input_data);
+		obj_this.send_message(input_data, force_post);
 		input_data.body = obj_this.sanitizer.bypassSecurityTrustHtml(message_content);
         obj_this.active_chat_user.messages.push(input_data);        
         $('.emoji-wysiwyg-editor').html("");        
-        obj_this.files_in_message = {};
+        obj_this.attachments = [];
 		obj_this.scrollToEnd();
 	}
 
@@ -468,7 +409,16 @@ export class MessengerComponent implements OnInit {
 
     odoo_build = window['odoo'] ? 1 : undefined;
 	is_mobile_device = false;
-	ng_init = false;
+    ng_init = false;    
+
+    remove_attachment(el){        
+        let obj_this = this;                
+        var i = $(el.target).closest('.doc-thumb').index();        
+        obj_this.attachments.splice(i, 1);        
+    }
+
+    attachments = [];
+
 	ngOnInit() {        
         var obj_this = this;
         $('#call_modal').keyup(function(){
@@ -477,6 +427,10 @@ export class MessengerComponent implements OnInit {
                 left: '10%'
             })
         });
+        for(var key in obj_this.socketService.chat_users)
+        {
+            obj_this.socketService.chat_users[key].messages = undefined;
+        }
 		$(document).ready(function(){
 			if($(window).width() <= 767){
                 $('.chat-container-wrppaer').hide();

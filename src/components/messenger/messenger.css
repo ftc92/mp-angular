@@ -578,3 +578,71 @@
     cursor: pointer;
 }
 
+.chat-selectBox{
+    position: absolute;
+    border-top: 1px solid #cccccc;
+    width: 100%;
+    margin: 0;
+    bottom: 0;
+    padding-right: 10px;
+}
+
+.chat-selectBox .call_container{
+    padding: 15px 0;
+    position: relative;
+    display: flex;
+    overflow-x: auto;
+}
+
+.chat-selectBox .call_container:after, .chat-selectBox .call_container:before{
+    display: block;
+    content: "";
+    clear: both;
+}
+.doc-thumb{
+	border-radius: 16px;
+	height: 60px;
+    width: 250px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, .15);
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    }
+.doc-thumb-icon{
+    background-color: rgb(0, 132, 255);
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+.doc-thumb-icon i{
+    color: #ffffff;
+}
+.doc-thumb-close{
+    position: absolute;
+    right: 7px;
+    top: 4px;
+    opacity: 0.5;    
+}
+
+.doc-thumb-close:hover{
+    opacity: 1;
+}
+
+.file_name{
+    color: #1d2129;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 10px 0 0;
+    flex: 1;
+}
+#attach_modal{
+    
+}

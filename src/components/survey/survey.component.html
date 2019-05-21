@@ -17,12 +17,66 @@
 		</div>
 	</div>
 
-	<div class="dociframecontaine"style="width: calc(100vw + 17px);
-    top: 94px;
-    margin-left: -15px;
-    position: fixed;
-    height: calc(100vh - 94px);">
-		<iframe id='survey-iframe' style="width: 100%;height: 100%;">
-		</iframe>
+	<div class="container" *ngIf="surveyDetails">        
+		<div class=" form-details">
+				<div class="meeting-details-form">
+
+						<div class="div1">
+								<div *ngIf="surveyDetails.name" class="row">
+										<div class="col-sm-3 meet-elements">
+												Subject
+										</div>
+										<label class="col-sm-9">
+												{{surveyDetails.name}}
+										</label>
+								</div>
+
+								<div *ngIf="surveyDetails.meeting && surveyDetails.meeting.name" class="row">
+										<div class="col-sm-3 meet-elements">
+												Meeting Subject
+										</div>
+										<a class="col-sm-6 col-md-4 col-lg-4 anchor-mb" routerLink="/home/meeting/{{voting_object.meeting.id}}">{{voting_object.meeting.name}}</a>
+								</div>
+
+								<div *ngIf="surveyDetails.topic && surveyDetails.topic.name" class="row">
+										<div class="col-sm-3 meet-elements">
+												Topic Subject
+										</div>
+										<a class="col-sm-6 col-md-4 col-lg-4 anchor-mb" routerLink="/topic/{{voting_object.topic.id}}">{{voting_object.topic.name}}</a>
+								</div>
+
+						</div>
+
+
+						<div class="div2">
+								<div *ngIf="surveyDetails.hasOwnProperty('description') && surveyDetails.description" class="row">
+										<div class="col-sm-3 meet-elements">
+												Description
+										</div>
+										<label class="col-sm-9" [innerHtml]="surveyDetails.description"></label>
+								</div>
+						</div>
+
+						<div class="div3">
+							<div *ngIf="surveyDetails.questions && surveyDetails.questions.length" class="row">
+									<div class="col-sm-3 meet-elements">
+											Questions
+									</div>
+									<!-- <div *ngFor="let question of surveyDetails.questions">
+										<label class="col-sm-9">
+											{{question.text}}
+										</label>
+									</div> -->
+									<div>
+										<label class="col-sm-9" *ngFor="let question of surveyDetails.questions">
+											{{question.text}}
+										</label>
+									</div>
+							</div>
+						</div>
+
+				</div>
+		</div>
+		<app-comments *ngIf="voting_object && voting_object.enable_discussion" res_app="{{discussion_params.res_app}}" res_model="{{discussion_params.res_model}}" res_id="{{discussion_params.res_id}}"></app-comments>
 	</div>
 </div>

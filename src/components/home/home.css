@@ -142,7 +142,7 @@ div#welcome {
     background:white;
 }
 
-.active{
+btn.active{
   background-color: #7c7bad;
   color: white;
   border-color: #7c7bad;

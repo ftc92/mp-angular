@@ -48,7 +48,10 @@ import { VotingdetailsComponent } from '../components/votingdetails/votingdetail
 import { VotingresultsComponent } from '../components/votingresults/votingresults.component';
 import { RecordEditComponent } from '../components/recordedit/recordedit.component';
 import { VotingsComponent } from '../components/votings/votings.component';
+import { EsignDocsComponent } from "src/components/esigndocs/esigndocs.component";
+import { EsignDocDetailsComponent } from "src/components/esigndocdetails/esigndocdetails.component";
 import { RtcComponent } from '../components/rtc/rtc.component';
+import { SurveysComponent } from '../components/surveys/surveys.component'
 
 
 @NgModule({
@@ -92,7 +95,10 @@ import { RtcComponent } from '../components/rtc/rtc.component';
         VotingresultsComponent,
         RecordEditComponent,
         VotingsComponent,
+        EsignDocsComponent,
+        EsignDocDetailsComponent,
         RtcComponent,
+        SurveysComponent,
     ],
     providers:[
         AuthGuard,

@@ -36,7 +36,10 @@ import { VotingdetailsComponent } from '../components/votingdetails/votingdetail
 import { VotingresultsComponent } from "src/components/votingresults/votingresults.component";
 import { RecordEditComponent } from '../components/recordedit/recordedit.component';
 import { VotingsComponent } from '../components/votings/votings.component'
+import { EsignDocsComponent } from "src/components/esigndocs/esigndocs.component";
+import { EsignDocDetailsComponent } from "src/components/esigndocdetails/esigndocdetails.component";
 import { RtcComponent } from '../components/rtc/rtc.component';
+import { SurveysComponent } from '../components/surveys/surveys.component'
 
 const appRoutes: Routes = [    
     { path: 'login', component: LoginComponent},
@@ -98,7 +101,11 @@ const appRoutes: Routes = [
     { path: 'edit/:app/:model/:id/:action', component: RecordEditComponent, canActivate: [AuthGuard]},
     { path: 'edit/:app/:model/add', component: RecordEditComponent, canActivate: [AuthGuard]},
     { path: 'votings', data:{searchAble: true}, component: VotingsComponent, canActivate: [AuthGuard]},
+    { path: 'signdocs', data:{searchAble: true}, component: EsignDocsComponent, canActivate: [AuthGuard]},
+    { path: 'signdoc/:id', component: EsignDocDetailsComponent, canActivate: [AuthGuard]},
+    { path: 'surveys', data:{searchAble: true}, component: SurveysComponent, canActivate: [AuthGuard]},
 
+    
     { path: 'rtc', component: RtcComponent},
 	// otherwise redirect to home
 	{ path: '**', component: PageNotFound }

@@ -5,7 +5,7 @@ declare var $: any;
 
 @Component({
 	selector: 'survey',
-	styleUrls:['./survey.css'],
+	styleUrls:['./survey.css', '../votingdetails/meetingdetails.css'],
     templateUrl: './survey.component.html'
 })
 export class SurveyComponent implements OnInit {
@@ -33,17 +33,18 @@ export class SurveyComponent implements OnInit {
         obj_this.httpService.get(final_input_data,
 			(result: any) => {
 				obj_this.surveyDetails = result;
-				if(obj_this.surveyDetails['url']){
-                    $('#survey-iframe').attr('src',obj_this.surveyDetails['url']);
-                    $('#survey-iframe').load(function(){
-                        window["functions"].hideLoader('survey-iframe');
-                    });
-				}
-
-				this.bread_crumb.title = obj_this.surveyDetails['survey_name'];
-				// if (page_url.indexOf('home') !== -1) {
-				// 	this.bread_crumb.items.push({ title: 'Home', link: '/' });
+					window["functions"].hideLoader('survey-iframe');
+				// if(obj_this.surveyDetails['url']){
+                //     $('#survey-iframe').attr('src',obj_this.surveyDetails['url']);
+                //     $('#survey-iframe').load(function(){
+                //         window["functions"].hideLoader('survey-iframe');
+                //     });
 				// }
+
+				this.bread_crumb.title = obj_this.surveyDetails['name'];
+				if (page_url.indexOf('home') !== -1) {
+					this.bread_crumb.items.push({ title: 'Home', link: '/' });
+				}
 				if (obj_this.surveyDetails['meeting_name'] && obj_this.surveyDetails['meeting_id']) {
 					this.bread_crumb.items.push({
 						title: obj_this.surveyDetails['meeting_name'],

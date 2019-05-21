@@ -1,0 +1,43 @@
+﻿<app-paginator></app-paginator>
+<div class=" breadcrumbSection mt-0">
+    <button (click)="uploadClick()" class="btn btn-primary request_sign" >Request Signature</button>
+    <input (change)="addFile($event)" type="file" id="esign_upload" name="file" />
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <ol class="breadcrumb">
+            <!-- <li class="breadcrumb-item" *ngFor="let item of bread_crumb.items">
+              <a routerLink="{{item.link}}">
+                {{item.title}}
+              </a>
+            </li> -->
+            <!-- <li class="breadcrumb-item">{{bread_crumb.title}}</li> -->
+          </ol>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div id="main-div">
+    <div class="cards container">
+        <div class="row">
+            <div class="kanban-card " *ngFor="let doc of docs"> 
+                <a routerLink="/signdoc/{{doc.id}}" class="kanban-folder">                
+                    <i class="fa fa-file"></i>
+                    <span>{{doc.name}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="!docs">
+      <div class="row">
+        <div class="col-lg-12 ">
+          <div class="jumbotron text-center">
+            <h1>There are no resources for now!</h1>
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
