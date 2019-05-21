@@ -1,0 +1,9 @@
+<div class="messageicon-container mobile-chatroom nav-icon dropdown">
+    <button *ngIf="!odoo_build" routerLink="/messenger" class="showmouseawaybutton notification-icon">
+        <i class="fas fa-comment"></i>
+    </button>
+    <span *ngIf="odoo_build">
+        <i class="fas fa-comment"></i>
+    </span>
+    <span class="un-read-msg" *ngIf="socketService.unseen_messages !=0 ">{{socketService.unseen_messages}}</span>
+</div>

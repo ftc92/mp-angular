@@ -1,0 +1,78 @@
+﻿<div id="main-div">
+        <!-- <link rel="stylesheet" href="static/angular/assets/css/components/commiteedetails.css"> -->
+        <div class=" breadcrumbSection">
+                <div class="edit-buttons" *ngIf="committee">
+                        <a class="btn btn-primary" routerLink="/edit/meetings/committee/{{committee.id}}/change">Edit</a>
+                        <a class="btn btn-danger" routerLink="/edit/meetings/committee/{{committee.id}}/delete">Delete</a>
+                    </div> 
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a routerLink="/committees">
+                                    Committees
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" *ngIf="committee">{{committee.name}}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div  class="cards container">
+            <div class="page-links">
+                <span class="prev next-prev-link" title="Privious">
+                    <i class="fa fa-angle-left"></i>
+                </span>
+                <span class="next next-prev-link" title="Next">
+                    <i class="fa fa-angle-right"></i>
+                </span>
+            </div>
+    
+            <div class="container">
+                <div *ngIf="committee" class="deatils-form">
+                    <h2 class="heading-title">
+                        <span>{{committee.name}}</span>
+                    </h2>
+                    <div class="row">
+                            <div class="col-sm-4" style="border-right: 1px solid #cccccc;">
+                                <label>
+                                    <b>Charter</b>
+                                </label>
+                            </div>
+                            <div class="col-sm-8">
+                                    <span [innerHtml]="committee.description"></span>
+                            </div>
+                    </div>
+    
+                    <div  class="container">
+                        <div class="row">
+                            <div class="kanban-committees col-xs-12 col-sm-6 col-md-4" *ngFor="let member of committee.users">
+                                <a class="kanban-committees-info-box" routerLink="/profile/{{member.id}}">
+                                    <div class="kanban-profiles-user-img">
+                                        <img title="{{member.name}}" class="img-thumbnail-md" src="{{socketService.server_url}}{{member.image}}">
+                                    </div>
+                                    <div class="kanban-profiles-user-info">
+                                        <div class="kanban-profiles-user-name">
+                                            {{member.username}}
+                                        </div>
+                                        <div *ngIf="member.email" class="kanban-profiles-user-email">
+                                            {{member.email}}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <span title="Next" *ngIf="next" style="font-size: 72px; color: black;" routerLink="/committees/{{next}}">
+                <i class="fa fa-angle-right"></i>
+            </span> 
+            <span title="Previous" *ngIf="prev" style="font-size: 72px; color: black;" routerLink="/committees/{{prev}}">
+                <i class="fa fa-angle-left"></i>
+            </span> -->
+        </div>
+    </div>
+    
